@@ -1,0 +1,12 @@
+pycrptodome
+pillow
+bcrypt
+PyJWT
+numpy
+pandas
+PyYAML
+fastapi
+pydantic
+uvicorn
+aiohttp
+python-dotenv

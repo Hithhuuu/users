@@ -1,0 +1,44 @@
+# User
+read: >
+  SELECT
+      userid,
+      firstname,
+      lastname,
+      email,
+      toString(cdt) as cdt,
+      cby,
+      uby,
+      toString(udt) as udt,
+      app_access,
+      password,
+      case
+        when rfg = 1 then 'Y'
+        when rfg = 2 then 'N'
+      end as isactive
+    from
+      users 
+    where
+      rfg != 0
+      and userid not in ('{userid}')
+
+create: >
+  INSERT INTO users
+    (userid, preferedname, firstname, lastname, email, cdt, cby, uby, udt, rfg, password, usertype, app_access)
+    VALUES('{userid}', '{preferedname}', '{firstname}', '{lastname}', '{email}', now(), '{cby}', '{uby}', now(), 1, '{password}', '{usertype}', {app_access});
+user_exists: SELECT userid from users  where userid = '{userid}' and rfg = 1
+key: SELECT password from users  where userid = '{userid}' and rfg = 1
+authenticate: SELECT * from users   WHERE userid = '{userid}' and rfg = 1
+authenticate_update: SELECT * from users  WHERE userid = '{userid}' and rfg in (1,2)
+user_count: SELECT COUNT(1) AS count from users  WHERE userid in ('{userid}') and rfg = 0
+
+
+update:
+  INSERT INTO users
+    select userid,{preferedname},{firstname},{lastname},{email},cdt,cby,{uby},now() udt1,{rfg},{password},{usertype},{app_access} from users  where  {userid}
+
+
+
+delete : >
+  insert into users
+    SELECT userid, preferedname, firstname, lastname, email, cdt, cby, uby, udt, 0 as rfg1, password, usertype, app_access
+    FROM users    WHERE userid in ('{userid}') and rfg != 0
