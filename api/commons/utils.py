@@ -67,36 +67,6 @@ def decrypt(encrypted, passphrase):
     aes = AES.new(key, AES.MODE_CBC, iv)
     return unpad(aes.decrypt(encrypted[16:]))
 
-def get_queries(apiname =None):
-    """Get api queries"""
-    path = os.path.abspath(os.getcwd())
-    query_files = glob(path + f"/api/{apiname}/queries/*.yaml", recursive=True) \
-          if apiname else glob(path + "/api/*/*/*.yaml", recursive=True)
-    queries = {}
-    for qfile in query_files:
-        key = os.path.splitext(os.path.basename(qfile))[0]
-        with open(qfile) as file:
-            queries[key] = yaml.load(file, Loader=yaml.SafeLoader)
-            file.close()
-    return queries
-
-
-def get_user(request):
-    """Get auth data"""
-    auth = request.headers.get("Authorization")
-    options = {
-        "verify_signature": True,
-        "verify_exp": True,
-        "verify_nbf": False,
-        "verify_iat": True,
-        "verify_aud": False,
-    }
-    token = auth.split()[1]
-    return decode(token, os.getenv("secret_key") \
-            if os.getenv("secret_key") \
-            else os.getenv("SECRET_KEY"),
-            options=options, algorithms=["HS256"])
-
 
 
 def get_console_handler():
@@ -116,23 +86,6 @@ def get_file_handler(log_file):
     file_handler = TimedRotatingFileHandler(log_file, when="midnight", backupCount=env.get(os.getenv("tlfpyenv")))
     file_handler.setFormatter(FORMATTER)
     return file_handler
-
-
-async def get_async_connection_pool():
-    """
-    Get an asynchronous connection pool.
-
-    Returns:
-        pool_async.Pool: An asynchronous connection pool.
-    """
-    return await pool_async.create_pool(
-        dsn=os.getenv("DB_DSN"),
-        port=5432,
-        user=decrypt(os.getenv("db_user"),\
-                      bytes(os.getenv("password_secret_key"), "utf-8")).decode("utf-8"),
-        password=decrypt(os.getenv("db_password"), bytes(
-            os.getenv("password_secret_key"), "utf-8")).decode("utf-8")
-    )
 
 
 def get_logger(logger_name):
@@ -159,5 +112,4 @@ def create_directories():
             os.mkdir(d)
     return True
 
-queries = get_queries()
 

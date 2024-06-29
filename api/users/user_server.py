@@ -14,7 +14,6 @@ if os.getenv("ENV"):
     os.environ['env'] = args.env
 dotenv = {
     "dev": "api/user/.env.dev",
-    "prd": "api/user/.env.prd"
 }
 load_dotenv(dotenv_path=dotenv.get(os.getenv("env")))
 from api.user.user_api import userhandler
