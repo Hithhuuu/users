@@ -4,7 +4,6 @@ import sys
 import uvicorn
 import argparse
 from dotenv import load_dotenv
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-p','--port',type=int)
@@ -13,12 +12,14 @@ args = parser.parse_args()
 if os.getenv("ENV"):
     os.environ['env'] = args.env
 dotenv = {
-    "dev": "api/user/.env.dev",
+    "dev": "api/users/.env.dev",
 }
 load_dotenv(dotenv_path=dotenv.get(os.getenv("env")))
-from api.user.user_api import userhandler
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+
+from api.users.user_api import user_handler
 from api.commons.fastapi_api import app
-app.include_router(userhandler.router)
+app.include_router(user_handler.router)
 if __name__ == "__main__":
     if args.port:
 

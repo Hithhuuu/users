@@ -2,9 +2,8 @@
 from fastapi import APIRouter, Request,Depends
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from api.user.schema import authentication
-from api.user.user_api.user_model import Users
-from api.commons.utils import get_user, verify_user
+from api.users.schema import authentication
+from api.users.user_api.user_model import Users
 
 router = APIRouter()
 

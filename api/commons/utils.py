@@ -1,5 +1,6 @@
 """Utils file for WIzer"""
 import os
+import sys
 import base64
 import logging
 import uuid

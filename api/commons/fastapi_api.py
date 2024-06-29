@@ -12,7 +12,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi import HTTPException,  Response
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.responses import JSONResponse
-from api.commons.utils import get_async_connection_pool,get_logger
+from api.commons.utils import get_logger
 
 
 secret_key = (os.getenv("secret_key"))
