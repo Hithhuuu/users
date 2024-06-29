@@ -10,3 +10,4 @@ pydantic
 uvicorn
 aiohttp
 python-dotenv
+certifi

@@ -17,7 +17,7 @@ dotenv = {
 }
 load_dotenv(dotenv_path=dotenv.get(os.getenv("env")))
 from api.user.user_api import userhandler
-from api.commons.fastapi_app import app
+from api.commons.fastapi_api import app
 app.include_router(userhandler.router)
 if __name__ == "__main__":
     if args.port:

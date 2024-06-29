@@ -94,7 +94,6 @@ def get_logger(logger_name):
     param: logger name
     return: logger object
     """
-    create_directories()
     logger = logging.getLogger(logger_name)
     # better to have too much log than not enough
     logger.setLevel(logging.DEBUG)
@@ -104,12 +103,5 @@ def get_logger(logger_name):
     # with this pattern, it's rarely necessary to propagate the error up to parent
     logger.propagate = False
     return logger
-
-def create_directories():
-    """Initialize all required directories"""
-    for d in os.getenv("directories"):
-        if not (os.path.isdir(d)):
-            os.mkdir(d)
-    return True
 
 

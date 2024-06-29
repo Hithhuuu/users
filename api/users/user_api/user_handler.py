@@ -13,7 +13,7 @@ router = APIRouter()
 async def auth(body: authentication):
     """On get request return the user\'s list as JSON"""
     user = Users()
-    response = await user.get()
+    response = await user.auth(dict(body))
     if response.get("status", "success") != "error":
         return JSONResponse(response)
     return JSONResponse(

@@ -19,14 +19,14 @@ class Users:
     async def auth(self, data):
         """Authentication users with username and password"""
         try:
-            user = json.loads(os.getenv("users"))
+            user = json.loads(os.getenv("user"))
             pass_word = decrypt(
                 data["password"], bytes(
-                    os.getenv("password_secret_key"), "utf-8")
+                    os.getenv("secret_key"), "utf-8")
             ).decode("utf-8")
             saved_password = decrypt(
                 user["password"], bytes(
-                    os.getenv("password_secret_key"), "utf-8")
+                    os.getenv("secret_key"), "utf-8")
             ).decode("utf-8")
             if  pass_word==saved_password and user.get("userid")==data.get("userid"):
                 to_encode = {
@@ -36,7 +36,7 @@ class Users:
                     "exp": datetime.utcnow() + timedelta(minutes=480),
                 }
                 encoded = encode(
-                    to_encode, env_config["secret_key"], algorithm="HS256")
+                    to_encode, os.getenv("secret_key"), algorithm="HS256")
                 jwt_key = (
                     encoded.decode(
                         "utf-8") if (isinstance(encoded, bytes)) else encoded
@@ -76,9 +76,9 @@ class Users:
                 "x-rapidapi-host": "latest-mutual-fund-nav.p.rapidapi.com"
             }
 
-            response = requests.get(os.getenv("url"), headers=headers, params=querystring)
+            response = requests.get(os.getenv("url"), headers=headers, params=query_param_str, verify=False)
             if response.status_code ==200:
-                return response.json()
+                return {"data": response.json()}
             return {'msg': 'navdetails rapid api failed'}
         except Exception as e :
             app_log.exception(e)
